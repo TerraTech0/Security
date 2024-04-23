@@ -3,6 +3,7 @@
     import com.example.security.Api.ApiException;
     import com.example.security.Model.User;
     import com.example.security.Repository.AuthRepository;
+    import jakarta.servlet.http.HttpServletRequest;
     import lombok.RequiredArgsConstructor;
     import org.springframework.security.core.context.SecurityContextHolder;
     import org.springframework.security.core.userdetails.UserDetails;
@@ -52,8 +53,8 @@
             }
         }
         //add logout method
+        // I HAVE PROBLEM IN THIS METHOD AND I HAVE TO FIX IT!
         public void logout() {
-            SecurityContextHolder.getContext().setAuthentication(null);
         }
 
 

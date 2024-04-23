@@ -4,6 +4,7 @@ import com.example.security.Api.ApiException;
 import com.example.security.Api.ApiResponse;
 import com.example.security.Model.User;
 import com.example.security.Service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,12 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
+    @PostMapping("/register")//if i have many users with same names it will be unauthorize!
     public ResponseEntity regirster(@RequestBody @Valid User user){
         authService.register(user);
         return ResponseEntity.ok().body(new ApiResponse("Registered Successfully!"));
     }
+    //if the admin do something he has no authorize on it , it will be forbidden
 
 
     //add login and logout
@@ -34,7 +36,7 @@ public class AuthController {
         return ResponseEntity.ok().body("Logged in");
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/logout")// I HAVE A PROBLEM IN THIS METHOD!
     public ResponseEntity logout(){
         authService.logout();
         return ResponseEntity.ok().body(new ApiResponse("user logged out successfully!"));

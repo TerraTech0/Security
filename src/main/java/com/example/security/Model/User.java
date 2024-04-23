@@ -1,10 +1,7 @@
 package com.example.security.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -33,6 +31,10 @@ public class User implements UserDetails {
 
     @JsonIgnore
     private String role;
+
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Todo> todos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,3 +63,7 @@ public class User implements UserDetails {
         return true;
     }
 }
+
+
+
+// if i have another entity like customer or doctor i have to make a relation OneToOne with User Model!

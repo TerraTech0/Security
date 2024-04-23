@@ -22,6 +22,7 @@ public class SecurityConfig {
 
     @Bean //to use this method !
     public DaoAuthenticationProvider daoAuthenticationProvider(){
+        //first create a new object from DaoAuthenticationProvider
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         //resposible for username!
         daoAuthenticationProvider.setUserDetailsService(myUserDetailsService);
@@ -42,7 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         //csrf << cross
         http.csrf().disable()
-                .sessionManagement()
+                .sessionManagement()//created when i login
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
@@ -58,11 +59,13 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
 //                .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/auth/get-users", "/api/v1/auth/delete/{username}").hasAuthority("ADMIN")
+                .requestMatchers("/api/v1/todo/get-all").hasAuthority("ADMIN")
+                .requestMatchers("/api/v1/todo/get", "/api/v1/todo/add", "/api/v1/todo/delete/{todo_id}", "/api/v1/todo/update/update/{todo_id}").hasAuthority("CUSTOMER")
                 //hasRole("admin")
 //                .anyRequest().authenticated()
-                .anyRequest().permitAll() //<< saving my system with this line!
+                .anyRequest().permitAll() //<< saving my system from any attack with this line!
                 .and()
-                .logout().logoutUrl("/api/v1/auth/logout")
+                .logout().logoutUrl("/api/v1/auth/logout")//in logout the session will be invalid and delete cookies!
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
                 .and()
